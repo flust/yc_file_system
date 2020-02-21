@@ -1,9 +1,4 @@
-#include"InodeManager.h"
-#include"ImgDriver.h"
-#include"SuperBlock.h"
-#include"SuperBlockManager.h"
-#include<iostream>
-
+#include"head.h"
 
 extern ImgDriver g_ImgDriver;
 

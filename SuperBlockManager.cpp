@@ -1,8 +1,4 @@
-#include"SuperBlockManager.h"
-#include"ImgDriver.h"
-#include"SuperBlock.h"
-#include<iostream>
-#include<cstring>
+#include"head.h"
 
 using namespace std;
 extern ImgDriver g_ImgDriver;

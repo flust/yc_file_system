@@ -1,14 +1,4 @@
-#include<iostream>
-#include<cmath>
-#include<cstring>
-#include<algorithm>
-#include"ImgDriver.h"
-#include"constant.h"
-#include"Inode.h"
-#include"InodeManager.h"
-#include"SuperBlock.h"
-#include"SuperBlockManager.h"
-#include"Operator.h"
+#include"head.h"
 using namespace std;
 
 ImgDriver g_ImgDriver;

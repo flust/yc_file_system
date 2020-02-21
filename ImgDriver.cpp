@@ -1,5 +1,4 @@
-#include"ImgDriver.h"
-#include<iostream>
+#include"head.h"
 using namespace std;
 
 const char* ImgDriver::DISK_FILE_NAME = "./disk.img";

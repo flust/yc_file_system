@@ -1,6 +1,5 @@
 #pragma once
-#include"SuperBlock.h"
-#include"ImgDriver.h"
+#include"head.h"
 
 class SuperBlockManager
 {

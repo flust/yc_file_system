@@ -1,7 +1,4 @@
-#include"Operator.h"
-#include<iostream>
-#include<vector>
-#include<cstring>
+#include"head.h"
 
 using namespace std;
 extern ImgDriver g_ImgDriver;

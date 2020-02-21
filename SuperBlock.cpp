@@ -1,6 +1,4 @@
-#include"SuperBlock.h"
-#include<iostream>
-#include<cstring>
+#include"head.h"
 
 using namespace std;
 SuperBlock::SuperBlock()
