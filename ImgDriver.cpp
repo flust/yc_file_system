@@ -19,7 +19,7 @@ bool ImgDriver::write(const char* buf, const int buf_size, const int offset)
         return 0;
     fs.seekp(offset, ios::beg);
     fs.write(buf, buf_size);
-    cout << "!!!!!!!Img write to position " << offset << " to " << offset + buf_size << endl;
+    //cout << "!!!!!!!Img write to position " << offset << " to " << offset + buf_size << endl;
     return 1;
 }
 
@@ -30,6 +30,6 @@ bool ImgDriver::read(char* buf, const int buf_size, const int offset)
         return 0;
     fs.seekg(offset, ios::beg);
     fs.read(buf, buf_size);
-    cout << "!!!!!!Img read from position " << offset << " to " << offset + buf_size << endl;
+    //cout << "!!!!!!Img read from position " << offset << " to " << offset + buf_size << endl;
     return 1;
 }

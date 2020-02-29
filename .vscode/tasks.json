@@ -1,0 +1,32 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "-g",
+                "${workspaceRoot}/main.cpp", // 这里是你自己的源文件的名字
+                "${workspaceRoot}/ImgDriver.cpp", // 这也是源文件的名字，如果你有多个的话，都列上
+                "${workspaceRoot}/SuperBlock.cpp", // 这也是源文件的名字，如果你有多个的话，都列上
+                "${workspaceRoot}/SuperBlockManager.cpp", // 这也是源文件的名字，如果你有多个的话，都列上
+                "${workspaceRoot}/Inode.cpp", // 这也是源文件的名字，如果你有多个的话，都列上
+                "${workspaceRoot}/InodeManager.cpp", // 这也是源文件的名字，如果你有多个的话，都列上
+                "${workspaceRoot}/Operator.cpp", // 这也是源文件的名字，如果你有多个的话，都列上
+                "${workspaceRoot}/Buffer.cpp", // 这也是源文件的名字，如果你有多个的话，都列上
+                "${workspaceRoot}/BufferManager.cpp", // 这也是源文件的名字，如果你有多个的话，都列上
+                "${workspaceRoot}/File.cpp", // 这也是源文件的名字，如果你有多个的话，都列上
+                "-o",
+                "${workspaceRoot}/a.out"
+                
+            ],            
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}

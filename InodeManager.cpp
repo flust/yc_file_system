@@ -26,10 +26,24 @@ InodeManager::~InodeManager()
     cout << "~InodeManager end"  << endl;
 }
 
+void InodeManager::saveAll()
+{
+    //cout << "Iset.size() = " << Iset.size() << endl;
+    set<Inode*>::iterator it;
+    for(it = Iset.begin(); it != Iset.end(); it++)
+    {
+        if((*it) -> i_mode & Inode::IUPD)
+        {
+            //cout << "update an inode" << endl;
+            writeInode(*it);
+        }
+    }
+}
+
 /*
     从磁盘中读一个 Inode
 */
-Inode InodeManager::readFromDisk(int no)
+Inode* InodeManager::readFromDisk(int no)
 {
     Inode* new_inode;
     new_inode = new Inode;
@@ -39,11 +53,11 @@ Inode InodeManager::readFromDisk(int no)
     for(it = Iset.begin(); it != Iset.end(); it++)
     {
         if((*it)->i_number == no)
-            return *new_inode;
+            return *it;
     }
     Iset.insert(new_inode);
-    new_inode -> printInode();
-    return *new_inode;
+    //new_inode -> printInode();
+    return new_inode;
 }
 
 void InodeManager::addInode(Inode* inode)
@@ -65,8 +79,8 @@ Inode InodeManager::getNewInode()
 */
 void InodeManager::writeInode(Inode* inode)
 {
-    cout << "write Inode no: " << inode->i_number << endl;
-    inode->printInode();
+    //cout << "write Inode no: " << inode->i_number << endl;
+    //inode->printInode();
     ID->write((char*)inode, sizeof(DiskInode), SUPERBLOCK_SIZE + inode->i_number * sizeof(DiskInode));
 }
 

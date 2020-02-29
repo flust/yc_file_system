@@ -12,10 +12,12 @@ public:
     InodeManager();
     ~InodeManager();
 
+    void saveAll();
+
     /*
      * 从磁盘中读一个 Inode
      */
-    Inode readFromDisk(int no);
+    Inode* readFromDisk(int no);
 
     /*
      * 添加一个节点
@@ -32,7 +34,6 @@ public:
         向磁盘写一个 Inode
     */
     void writeInode(Inode* inode);
-
 
     void printInode(int no);
 };

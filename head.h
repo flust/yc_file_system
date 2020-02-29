@@ -6,7 +6,9 @@
 #include<cstring>
 #include<algorithm>
 #include<fstream>
-#include"Block.h"
+#include<stack>
+#include"Buffer.h"
+#include"BufferManager.h"
 #include"ImgDriver.h"
 #include"constant.h"
 #include"Inode.h"
@@ -14,3 +16,4 @@
 #include"SuperBlock.h"
 #include"SuperBlockManager.h"
 #include"Operator.h"
+#include"File.h"

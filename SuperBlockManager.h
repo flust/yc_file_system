@@ -22,7 +22,8 @@ public:
      */
     int allocInode();
 
-    
+    int allocBlock();
 
+    void freeBlock(int no);
 };
 

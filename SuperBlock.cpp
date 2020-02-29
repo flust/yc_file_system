@@ -29,3 +29,14 @@ void SuperBlock::printSuperBlock()
     cout << "s_dirty = " << s_dirty << endl;
     cout << "===================================" << endl;
 }
+
+void SuperBlock::printFree()
+{
+    cout << "=========== Free[100]===========" << endl;
+    cout << "n = " << s_nfree << endl;
+    for(int i = 0; i < 100; i++)
+    {
+        cout << s_free[i] << endl;
+    }
+    cout << "================================" << endl;
+}
