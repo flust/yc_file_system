@@ -32,6 +32,4 @@ public:
     void printSuperBlock();
 
     void printFree();
-
-
 };

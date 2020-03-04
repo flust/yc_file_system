@@ -1,6 +1,7 @@
 #pragma once
 #include"ImgDriver.h"
 #include"SuperBlock.h"
+#include"Inode.h"
 #include"Buffer.h"
 #include"SuperBlockManager.h"
 
@@ -33,13 +34,25 @@ public:
      */
     int readBlock(int d_blkno);
 
+    /*
+     * 写入一个block
+     */
     void writeBlock(int no, Block* block);
+
+    /*
+     * 读取文件中一个 Block 输入块号 t 和 Inode
+     */
+    Block* readFileBlock(Inode *f_inode, int t);
+
+
+    void setNewFileBlock(Inode *f_inode, int blkno);
+
+    void writeFileBlock(Inode *f_inode, Block*new_block, int t);
+
     /*
      * 刷新buffer，将延迟写的缓存Block写入磁盘
      */
-    void flushBuffer();
-
-    
+    void flushBuffer();    
 
     void printBuffer(int no);
     void printBlock(int no);

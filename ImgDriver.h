@@ -19,5 +19,4 @@ public:
 
     //读操作
     bool read(char* buf, const int buf_size, const int offset);
-
 };

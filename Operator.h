@@ -66,6 +66,11 @@ public:
     void cd(string folder_name);
 
     /*
+     * 将外部文件拷贝进内部
+     */
+    void movein(string out_file_name, string in_file_name);
+
+    /*
      * 创建文件
      */
     void fcreate(string folder_name);
@@ -80,8 +85,14 @@ public:
      */
     void fclose();
 
+    /*
+     * 写入文件内容
+     */
     void fwrite(const char* buffer, const int size);
 
+    /*
+     * 读文件内容
+     */
     void fread(char* buffer, const int size);
 
     /*
@@ -89,6 +100,13 @@ public:
      */
     bool flseek(int pos);
 
+    /*
+     * 删除文件
+     */
     void fdelete(string file_name);
 
+
+    void flushAll();
+
+    void printFileInformation();
 };

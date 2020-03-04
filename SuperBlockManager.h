@@ -22,8 +22,19 @@ public:
      */
     int allocInode();
 
+    /*
+     * 释放一个Inode节点
+     */
+    void freeInode(int no);
+
+    /*
+     * 分配一个Block节点
+     */
     int allocBlock();
 
+    /*
+     * 分配一个Block节点
+     */
     void freeBlock(int no);
 };
 

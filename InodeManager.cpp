@@ -12,6 +12,7 @@ InodeManager::InodeManager()
 
 InodeManager::~InodeManager()
 {
+    /*
     cout << "Iset.size() = " << Iset.size() << endl;
     set<Inode*>::iterator it;
     for(it = Iset.begin(); it != Iset.end(); it++)
@@ -24,6 +25,7 @@ InodeManager::~InodeManager()
     }
     //delete *it;
     cout << "~InodeManager end"  << endl;
+    */
 }
 
 void InodeManager::saveAll()
@@ -98,6 +100,14 @@ void InodeManager::printInode(int no)
     cout << "i_size = " << inode.i_size << endl;
     cout << "i_addr[0] = " << inode.i_addr[0] << endl;
     cout << "i_addr[1] = " << inode.i_addr[1] << endl;
+    cout << "i_addr[2] = " << inode.i_addr[2] << endl;
+    cout << "i_addr[3] = " << inode.i_addr[3] << endl;
+    cout << "i_addr[4] = " << inode.i_addr[4] << endl;
+    cout << "i_addr[5] = " << inode.i_addr[5] << endl;
+    cout << "i_addr[6] = " << inode.i_addr[6] << endl;
+    cout << "i_addr[7] = " << inode.i_addr[7] << endl;
+    cout << "i_addr[8] = " << inode.i_addr[8] << endl;
+    cout << "i_addr[9] = " << inode.i_addr[9] << endl;
     cout << "i_number = " << inode.i_number << endl; 
     cout << "==============================" << endl;
 }

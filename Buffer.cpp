@@ -65,6 +65,11 @@ void Block::printBlock()
             cout << i + 1 << " : " << fn[i].file_name << ' ' << fn[i].inode_number << endl; 
         }
         cout << "======================================" << endl;
+        int* in = getIndexList();
+        for(int i = 0; i < 10; i++)
+        {
+            cout << i + 1 << "addr: " << in[i] << endl; 
+        }
     }
     else
     {

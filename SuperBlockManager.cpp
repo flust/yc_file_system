@@ -11,8 +11,8 @@ SuperBlockManager::SuperBlockManager()
 }
 
 SuperBlockManager::~SuperBlockManager(){
-    if(SB->s_dirty == 1)save();
-    return;
+    //if(SB->s_dirty == 1)save();
+    //return;
 };
 
 void SuperBlockManager::load()
@@ -51,6 +51,30 @@ int SuperBlockManager::allocInode()
     }
     cout << "Inode 节点用尽" << endl;
     return -1;
+}
+
+void SuperBlockManager::freeInode(int no)
+{
+    char c;
+    int one = 1;
+    for(int i = 0; i < IBITMAP_SIZE; i++)
+    {
+        c = SB->s_ibitmap[i];
+        cout << "c: " << (int)c << endl;
+        for(int j = 0; j < 8; j++)
+        {
+            if(no == 0)
+            {
+                //将s_ibitmap的第 8 * i + j 位置零
+                cout << "free inode: " << 8 * i + j << endl;
+                SB->s_ibitmap[i] = (c & !(one << (7 - j)));
+                return;
+            }
+            no--;
+        }
+    }
+    cout << "ERROR: free inode failed." << endl;
+    return ;
 }
 
 int SuperBlockManager::allocBlock()
