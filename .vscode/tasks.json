@@ -18,7 +18,6 @@
                 "${workspaceRoot}/Operator.cpp", // 这也是源文件的名字，如果你有多个的话，都列上
                 "${workspaceRoot}/Buffer.cpp", // 这也是源文件的名字，如果你有多个的话，都列上
                 "${workspaceRoot}/BufferManager.cpp", // 这也是源文件的名字，如果你有多个的话，都列上
-                "${workspaceRoot}/File.cpp", // 这也是源文件的名字，如果你有多个的话，都列上
                 "-o",
                 "${workspaceRoot}/a.out"
                 

@@ -73,6 +73,10 @@ void BufferManager::writeBlock(int no, Block* block)
     return ;
 }
 
+/**
+ * 读取文件第 t 块内容，返回值为Block
+ * 其中包括了对于大文件的处理
+ */
 Block* BufferManager::readFileBlock(Inode* f_inode, int t)
 {
     int no;

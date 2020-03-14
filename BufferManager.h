@@ -25,23 +25,23 @@ public:
     int allocBlock();
 
     /*
-     * 释放一个Block
-     */
+        * 释放一个Block
+        */
     void freeBlock(int no);
 
     /*
-     * 从buffer中读一个block，如果读不到，则从硬盘读入
-     */
+        * 从buffer中读一个block，如果读不到，则从硬盘读入
+        */
     int readBlock(int d_blkno);
 
     /*
-     * 写入一个block
-     */
+        * 写入一个block
+        */
     void writeBlock(int no, Block* block);
 
     /*
-     * 读取文件中一个 Block 输入块号 t 和 Inode
-     */
+        * 读取文件中一个 Block 输入块号 t 和 Inode
+        */
     Block* readFileBlock(Inode *f_inode, int t);
 
 
@@ -50,8 +50,8 @@ public:
     void writeFileBlock(Inode *f_inode, Block*new_block, int t);
 
     /*
-     * 刷新buffer，将延迟写的缓存Block写入磁盘
-     */
+        * 刷新buffer，将延迟写的缓存Block写入磁盘
+        */
     void flushBuffer();    
 
     void printBuffer(int no);

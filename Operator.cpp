@@ -101,7 +101,7 @@ void Operator::receiveOrder()
 
     while(1)
     {
-        cout << "[" << users_name << "@YC_FS " << CLN.top() << "] ";
+        cout << "[" << users_name << "@1650917_YC_FS " << CLN.top() << "] ";
         if(f_isopen)cout << "<" << f_name << "> has opened >>>> ";
         getline(cin, line);
         if(line.size() == 0)
@@ -158,7 +158,7 @@ void Operator::receiveOrder()
         else if(order[0] == "fread")
         {
             /* fread 读文件 */
-            char* buffer;
+            char buffer[10000];
             if(f_isopen == 1)
             {
                 fread(buffer, atoi(order[1].c_str()));
@@ -204,6 +204,12 @@ void Operator::receiveOrder()
             }
             //cout << "----cp" << endl;
         }
+        else if(order[0] == "pwd")
+        {
+            /* 打印当前目录 */
+            pwd();
+            //cout << "----cp" << endl;
+        }
         else if(order[0] == "print")
         {
             /* 输出信息 */
@@ -235,7 +241,7 @@ void Operator::receiveOrder()
         }
         else
         {
-            cout << "----input error" << endl;
+            cout << "ERROR: input error." << endl;
         }
         IM->saveAll();
         BM->flushBuffer();
@@ -270,7 +276,7 @@ void Operator::format()
     memset(root_inode->i_addr, 0, sizeof(root_inode->i_addr));
     root_inode->i_addr[0] = SUPERBLOCK_SIZE / BLOCK_SIZE + INODE_NUM / sizeof(DiskInode);
     
-    cout << root_inode->i_addr[0] << endl;
+    //cout << root_inode->i_addr[0] << endl;
 
     root_inode->i_number = 0;
     IM->addInode(root_inode);  //添加根目录 Inode
@@ -292,6 +298,8 @@ void Operator::format()
     SBM->save();
 
     current_inode_id = 0;
+
+    cout << "Format success." << endl;
 }    
 
 void Operator::ls()
@@ -620,19 +628,36 @@ void Operator::fwrite(const char* buffer, const int size)
     cout << "write to file "<< endl;
     cout << buffer << endl;
     cout << "size: " << size << endl;
+    //blkno0 : 需要写的第一块编号
     int blkno0 = f_seek / BLOCK_SIZE;
     int sur0 = f_seek % BLOCK_SIZE;
     int blkno1 = (f_seek + size) / BLOCK_SIZE;
     int sur1 = (f_seek + size) % BLOCK_SIZE;
     int size_r = size;
+    int buffer_offset = 0;
 
     //先拷贝第一块
     Block* old_blk = BM->readFileBlock(f_inode, blkno0);
-    memcpy(old_blk->content + sur0, buffer, 512 - sur0);
+    memcpy(old_blk->content + sur0, buffer + buffer_offset, 512 - sur0);
+    buffer_offset += 512 - sur0;
+    size_r -= 512 - sur0;
     BM->writeFileBlock(f_inode, old_blk, blkno0);
 
+    //final_block_num : 写完全部内容后最后一块标号
     int final_block_num = blkno1 + (sur1 != 0);
+    //begin_block_num : 文件未修改时最后一块标号
     int begin_block_num = f_inode->i_size / BLOCK_SIZE + (f_inode->i_size % BLOCK_SIZE != 0);
+    
+    //拷贝不需要重新申请的块
+    for(int i = 1; i < min(begin_block_num, final_block_num) - blkno0; i++)
+    {
+        old_blk = BM->readFileBlock(f_inode, blkno0 + i);
+        memcpy(old_blk->content, buffer + buffer_offset, min(size_r, 512));
+        BM->writeFileBlock(f_inode, old_blk, blkno0 + i);
+        buffer_offset += min(size_r, 512);
+        size_r -= min(size_r, 512);
+    }
+    
     if(begin_block_num == 0)begin_block_num++;
     int *new_blkno;
     int *new_b_blkno;
@@ -660,12 +685,12 @@ void Operator::fwrite(const char* buffer, const int size)
         {
             if(size_r > BLOCK_SIZE)
             {
-                memcpy(g_Buffer.b_blocks[new_b_blkno[i]].content, buffer + sur0 + i * BLOCK_SIZE, BLOCK_SIZE);
+                memcpy(g_Buffer.b_blocks[new_b_blkno[i]].content, buffer + buffer_offset + sur0 + i * BLOCK_SIZE, BLOCK_SIZE);
                 size_r -= BLOCK_SIZE;
             }
             else{
                 memset(g_Buffer.b_blocks[new_b_blkno[i]].content, 0, BLOCK_SIZE);
-                memcpy(g_Buffer.b_blocks[new_b_blkno[i]].content, buffer + sur0 + i * BLOCK_SIZE, size_r);
+                memcpy(g_Buffer.b_blocks[new_b_blkno[i]].content, buffer + buffer_offset + sur0 + i * BLOCK_SIZE, size_r);
             }
         }
         f_inode->i_size = f_seek + size;
@@ -674,6 +699,18 @@ void Operator::fwrite(const char* buffer, const int size)
     {
         if(f_seek + size > f_inode->i_size)f_inode->i_size = f_seek + size;
     }
+    
+    /*
+    if(blkno0 < blkno1)
+    {
+        blkno0++;
+        old_blk = BM->readFileBlock(f_inode, blkno0);
+        memcpy(old_blk->content + sur0, buffer, 512 - sur0);
+        BM->writeFileBlock(f_inode, old_blk, blkno0);
+    }
+*/
+
+
     cout << "f_size: " << f_inode->i_size << endl;
 
     //ID->write(buffer, size, offset0);
@@ -684,32 +721,42 @@ void Operator::fwrite(const char* buffer, const int size)
 
 void Operator::fread(char* buffer, const int size)
 {   
+    if(size > 10000)
+    {
+        cout << "ERROR: read too long, cannot print!" << endl;
+        return ;
+    }
     int no = f_seek / BLOCK_SIZE;
     Block* read_block = new Block;
     read_block = BM->readFileBlock(f_inode, no);
     int size_r = size;
+    int buffer_offset = 0;
     int sur0 = f_seek % BLOCK_SIZE;
     //先读第一块（可能是不全的）
     if(size_r + sur0 > BLOCK_SIZE)
     {
-        memcpy(buffer, &read_block->content + sur0, BLOCK_SIZE - sur0);
-        size_r = size - BLOCK_SIZE - sur0;
+        memcpy(buffer + buffer_offset, read_block->content + sur0, BLOCK_SIZE - sur0);
+        size_r = size - BLOCK_SIZE + sur0;
+        buffer_offset += BLOCK_SIZE - sur0;
+        no++;
     }
     else{
-        memcpy(buffer, read_block->content + sur0, size_r);
+        memcpy(buffer + buffer_offset, read_block->content + sur0, size_r);
+        buffer_offset += size_r;
     }
     while(size_r > BLOCK_SIZE)
     {
-        no++;
         read_block = BM->readFileBlock(f_inode, no);
-        memcpy(buffer, read_block->content, BLOCK_SIZE);
+        memcpy(buffer + buffer_offset, read_block->content, BLOCK_SIZE);
+        buffer_offset += BLOCK_SIZE;
         size_r -= BLOCK_SIZE;
+        no++;
     }
     if(size_r > 0 && no != 0)
     {
-        no++;
         read_block = BM->readFileBlock(f_inode, no);
-        memcpy(buffer, read_block->content, size_r);
+        memcpy(buffer + buffer_offset, read_block->content, size_r);
+        buffer_offset += size_r;
     }
     return;
 }
@@ -876,4 +923,32 @@ void Operator::flushAll()
     IM->saveAll();
     BM->flushBuffer();
     SBM->save();
+}
+
+
+
+void Operator::pwd()
+{
+    stack<string> ctl = CLN;
+    stack<string> ctl0;
+    while(ctl.size() >= 2)
+    {
+        ctl0.push(ctl.top());
+        ctl.pop();
+    }
+
+    if(ctl0.size() == 0)
+    {
+        cout << "/" << endl;
+    }
+    else
+    {
+        while(ctl0.size() >= 1)
+        {
+            cout << "/" << ctl0.top();
+            ctl0.pop();
+        }
+        cout << endl;
+    }
+    return;
 }
